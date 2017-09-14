@@ -1,0 +1,36 @@
+Before running the script, you should download and extract the folder "UCI HAR Dataset" in your current R directory. to know which is its name you  can use the function "getwd()". 
+ABOUT THE DATA
+The statistics variables are computations from the accelerometer and gyroscope 3-axial raw signals tAcc-XYZ and tGyro-XYZ catched from an experiment of human activity recognition using smartphones dataset. The following information is taken from the "readme" file from the original dataset:
+"The experiments have been carried out with a group of 30 volunteers within an age bracket of 19-48 years. Each person performed six activities (WALKING, WALKING_UPSTAIRS, WALKING_DOWNSTAIRS, SITTING, STANDING, LAYING) wearing a smartphone (Samsung Galaxy S II) on the waist. Using its embedded accelerometer and gyroscope, we captured 3-axial linear acceleration and 3-axial angular velocity at a constant rate of 50Hz. The experiments have been video-recorded to label the data manually. The obtained dataset has been randomly partitioned into two sets, where 70% of the volunteers was selected for generating the training data and 30% the test data."
+"The sensor signals (accelerometer and gyroscope) were pre-processed by applying noise filters and then sampled in fixed-width sliding windows of 2.56 sec and 50% overlap (128 readings/window). The sensor acceleration signal, which has gravitational and body motion components, was separated using a Butterworth low-pass filter into body acceleration and gravity. The gravitational force is assumed to have only low frequency components, therefore a filter with 0.3 Hz cutoff frequency was used. From each window, a vector of features was obtained by calculating variables from the time and frequency domain."
+The way the data was proccesed by the source is described in the file "features_info" attached with the original data set. It content is transcribed bellow:
+"The features selected for this database come from the accelerometer and gyroscope 3-axial raw signals tAcc-XYZ and tGyro-XYZ. These time domain signals (prefix 't' to denote time) were captured at a constant rate of 50 Hz. Then they were filtered using a median filter and a 3rd order low pass Butterworth filter with a corner frequency of 20 Hz to remove noise. Similarly, the acceleration signal was then separated into body and gravity acceleration signals using another low pass Butterworth filter with a corner frequency of 0.3 Hz."
+"Subsequently, the body linear acceleration and angular velocity were derived in time to obtain Jerk signals. Also the magnitude of these three-dimensional signals were calculated using the Euclidean norm.... Finally a Fast Fourier Transform (FFT) was applied to some of these signals... (Note the 'f' to indicate frequency domain signals)."
+"These signals were used to estimate variables of the feature vector for each pattern: '-XYZ' is used to denote 3-axial signals in the X, Y and Z directions."
+
+ABOUT THE VARIABLES
+The caracterization variables are the following:
+	code_activity: Contains the code that identifies the activity performed by the subject
+	activity: Contain the label of the activity performed by the subject. 1 for walking, 2 for 	walking upstairs, 3 for walking downstairs, 4 for sitting, 5 for standing and 6 for 	laying
+	subject: Contains the identifier from the subjetc and can take values from 1 to 30
+	set: Identifies the analysis performed to the subject. Can be train or test. Test group 	contain the 30% of the sample
+The statistics variables describes the calculations aplied to the raw data. To know details about each step of the procces read the 5th, 6th and 7th paragraphs of the "About the data" section in this file
+DESCRPITION OF THE SCRIPT
+The structure of the script is divided in parts and subparts. Parts are identified by a single number sign, and subparts are defined as a part of a part or another subpart. They can be identified by 2 number signs for the first level subparts (part of a part). Plus number signs can be added to identify subparts of subparts in the way they could be appear.  
+The script is divided into the following parts:
+1. FILES LOCATION: Before running the script, you should download and extract the folder "UCI HAR Dataset" in your current R directory. to know which is its name you  can use the function "getwd()". 
+this part of the script creates a list of objects with the name and location of the script's files that will be used in further steps.
+2.READ DATA OF INTEREST: Read the data required by the analysis and store it in R objects. The subjects are charged in a data frame that identifies them with the analysis that was performed to them (test group or train group). The subparts in these segment are the following:
+Headers: set the labels of the variables of study and the names of the activities.
+Subjects evaluated: are identified by numbers from 1 to 30
+Activity codes: activities are coded in the database with numbers from 1 to 6. the labels of those activities can be foun in the variables description
+Statistics calculated from the measuraments: Load the measurements calculated from the observations. To further information read the "about the data" section.
+3.CONSTRUCTION OF THE MAIN DATA FRAME: Is the procces of debuging the data frame and set a single data frame with the variables of interest. It is divided into the following subparts:
+Identify the measurements of interest: parse the headers from the data frame and identifies which ones contain mean and standard deviation measurements
+Make study data frames: Construction of two data frames, one for each set of study (train and test) with the variables of interest.
+Join data frames: binding of the two data frames created in the previous step into a single one
+Labeling activities: Merge the data frame with the activity indicator to label using the code of activity codes.
+4. AVERAGE OF MEASUREMENTS FOR ACTIVITY AND SUBJECT TABLE: From the previous data set creates a second, independent tidy data set with the average of each variable for each activity and each subject.
+
+
+
