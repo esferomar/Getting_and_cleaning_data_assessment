@@ -73,3 +73,7 @@ nrow(bdbind)
 library(dplyr)
 bdbind<-tbl_df(bdbind)
 bdbind<-arrange(bdbind,subject,activity)
+
+#AVERAGE OF MEASUREMENTS FOR ACTIVITY AND SUBJECT TABLE
+bdcons<-bdbind%>%group_by(subject,activity)%>%
+  summarise_at(c(3:81),mean)
