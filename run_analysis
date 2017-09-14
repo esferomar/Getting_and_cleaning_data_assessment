@@ -77,3 +77,5 @@ bdbind<-arrange(bdbind,subject,activity)
 #AVERAGE OF MEASUREMENTS FOR ACTIVITY AND SUBJECT TABLE
 bdcons<-bdbind%>%group_by(subject,activity)%>%
   summarise_at(c(3:81),mean)
+
+write.table(bdcons,file="SecondIndependentDataSet.csv",sep=",",row.names=F)
