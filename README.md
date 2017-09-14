@@ -3,82 +3,20 @@ Peer grade assessment of the course Getting and Cleanning Data offered by Course
 
 ######BEFORE RUNNING YOUR SCRIPT, MAKE SURE YOU DOWNLOADED AND EXTRACTED THE FOLDER "UCI HAR Dataset" IN YOUR CURRENT R DIRECTORY. TO KNOW WHICH IS ITS NAME YOU  CAN USE THE FUNCTION "GETWD()".
 
-#FILES LOCATION
-activity_labels<-paste(getwd(),"/UCI HAR Dataset/activity_labels.txt",sep="")
-features<-paste(getwd(),"/UCI HAR Dataset/features.txt",sep="")
-##test
-subject_test<-paste(getwd(),"/UCI HAR Dataset/test/subject_test.txt",sep="")
-X_test<-paste(getwd(),"/UCI HAR Dataset/test/X_test.txt",sep="")
-y_test<-paste(getwd(),"/UCI HAR Dataset/test/y_test.txt",sep="")
-##Test inertial signals
-body_acc_x_test<-paste(getwd(),"/UCI HAR Dataset/test/Inertial Signals/body_acc_x_test.txt",sep="")
-body_acc_y_test<-paste(getwd(),"/UCI HAR Dataset/test/Inertial Signals/boddy_acc_y_test.txt",sep="")
-body_acc_z_test<-paste(getwd(),"/UCI HAR Dataset/test/Inertial Signals/body_acc_z_test.txt",sep="")
-body_gyro_x_test<-paste(getwd(),"/UCI HAR Dataset/test/Inertial Signals/body_gyro_x_test.txt",sep="")
-body_gyro_y_test<-paste(getwd(),"/UCI HAR Dataset/test/Inertial Signals/body_gyro_y_test.txt",sep="")
-body_gyro_z_test<-paste(getwd(),"/UCI HAR Dataset/test/Inertial Signals/body_gyro_x_test.txt",sep="")
-total_acc_x_test<-paste(getwd(),"/UCI HAR Dataset/test/Inertial Signals/total_acc_x_test.txt",sep="")
-total_acc_y_test<-paste(getwd(),"/UCI HAR Dataset/test/Inertial Signals/total_acc_y_test.txt",sep="")
-total_acc_z_test<-paste(getwd(),"/UCI HAR Dataset/test/Inertial Signals/total_acc_z_test.txt",sep="")
-##train
-subject_train<-paste(getwd(),"/UCI HAR Dataset/train/subject_train.txt",sep="")
-X_train<-paste(getwd(),"/UCI HAR Dataset/train/X_train.txt",sep="")
-y_train<-paste(getwd(),"/UCI HAR Dataset/train/y_train.txt",sep="")
-##train Inertial Signals
-body_acc_x_train<-paste(getwd(),"/UCI HAR Dataset/train/Inertial Signals/body_acc_x_train.txt",sep="")
-body_acc_y_train<-paste(getwd(),"/UCI HAR Dataset/train/Inertial Signals/boddy_acc_y_train.txt",sep="")
-body_acc_z_train<-paste(getwd(),"/UCI HAR Dataset/train/Inertial Signals/body_acc_z_train.txt",sep="")
-body_gyro_x_train<-paste(getwd(),"/UCI HAR Dataset/train/Inertial Signals/body_gyro_x_train.txt",sep="")
-body_gyro_y_train<-paste(getwd(),"/UCI HAR Dataset/train/Inertial Signals/body_gyro_y_train.txt",sep="")
-body_gyro_z_train<-paste(getwd(),"/UCI HAR Dataset/train/Inertial Signals/body_gyro_x_train.txt",sep="")
-total_acc_x_train<-paste(getwd(),"/UCI HAR Dataset/train/Inertial Signals/total_acc_x_train.txt",sep="")
-total_acc_y_train<-paste(getwd(),"/UCI HAR Dataset/train/Inertial Signals/total_acc_y_train.txt",sep="")
-total_acc_z_train<-paste(getwd(),"/UCI HAR Dataset/train/Inertial Signals/total_acc_z_train.txt",sep="")
+DESCRPITION OF THE SCRIPT
+The structure of the script is divided in parts and subparts. Parts are identified by a single number sign, and subparts are defined as a part of a part or another subpart. They can be identified by 2 number signs for the first level subparts (part of a part). Plus number signs can be added to identify subparts of subparts in the way they could be appear.  
+The script is divided into the following parts:
+1. FILES LOCATION: Before running the script, you should download and extract the folder "UCI HAR Dataset" in your current R directory. to know which is its name you  can use the function "getwd()". 
+this part of the script creates a list of objects with the name and location of the script's files that will be used in further steps.
+2.READ DATA OF INTEREST: Read the data required by the analysis and store it in R objects. The subjects are charged in a data frame that identifies them with the analysis that was performed to them (test group or train group). The subparts in these segment are the following:
+Headers: set the labels of the variables of study and the names of the activities.
+Subjects evaluated: are identified by numbers from 1 to 30
+Activity codes: activities are coded in the database with numbers from 1 to 6. the labels of those activities can be foun in the variables description
+Statistics calculated from the measuraments: Load the measurements calculated from the observations. To further information read the "about the data" section.
+3.CONSTRUCTION OF THE MAIN DATA FRAME: Is the procces of debuging the data frame and set a single data frame with the variables of interest. It is divided into the following subparts:
+Identify the measurements of interest: parse the headers from the data frame and identifies which ones contain mean and standard deviation measurements
+Make study data frames: Construction of two data frames, one for each set of study (train and test) with the variables of interest.
+Join data frames: binding of the two data frames created in the previous step into a single one
+Labeling activities: Merge the data frame with the activity indicator to label using the code of activity codes.
+4. AVERAGE OF MEASUREMENTS FOR ACTIVITY AND SUBJECT TABLE: From the previous data set creates a second, independent tidy data set with the average of each variable for each activity and each subject.
 
-#READ DATA OF INTEREST
-##HEADERS
-featuresbd<-read.csv(features,sep="",header=F)
-featuresbd$V2<-sub("tBody","TimeBody",featuresbd$V2)
-featuresbd$V2<-sub("tGravity","TimeGravity",featuresbd$V2)
-featuresbd$V2<-sub("Acc","Accelerometer",featuresbd$V2)
-featuresbd$V2<-sub("Mag","Magnitude",featuresbd$V2)
-featuresbd$V2<-sub("Gyro","Gyroscope",featuresbd$V2)
-
-
-activityLabels<-read.csv(activity_labels,sep="",header=F)
-colnames(activityLabels)<-c("code_activity","activity")
-##SUBJECT EVALUATED.   
-sbjctTrain<-data.frame(read.csv(subject_train,sep=""),"train")
-colnames(sbjctTrain)<-c("subject","set")
-sbjctTest<-data.frame(read.csv(subject_test,sep=""),"test")
-colnames(sbjctTest)<-c("subject","set")
-##ACTIVITY CODES
-ytrain<-read.csv(y_train,sep="")
-colnames(ytrain)<-"code_activity"
-ytest<-read.csv(y_test,sep="")
-colnames(ytest)<-"code_activity"
-##STATISTICS CALCULATED FROM THE MEASUREMENTS
-xtrain<-read.csv(X_train,sep="")
-colnames(xtrain)<-featuresbd$V2
-xtest<-read.csv(X_test,sep="")
-colnames(xtest)<-featuresbd$V2
-
-#CONSTRUCTION OF THE MAIN DATA FRAME
-##IDENTIFY THE MEASUREMENTS OF INTEREST (MEANS AND STANDARD DEVIATION)
-means<-grep("mean()",featuresbd$V2)
-stds<-grep("std()",featuresbd$V2)
-##MAKE STUDY DATA FRAMES
-bdtrain<-data.frame(sbjctTrain,ytrain,xtrain[means],xtrain[stds])
-bdtest<-data.frame(sbjctTest,ytest,xtest[means],xtest[stds])
-##JOIN DATA FRAMES
-bdbind<-rbind(bdtrain,bdtest)
-##LABELING ACTIVITIES 
-bdbind<-merge(y=bdbind,x=activityLabels,by.x="code_activity",by.y="code_activity")
-nrow(bdbind)
-library(dplyr)
-bdbind<-tbl_df(bdbind)
-bdbind<-arrange(bdbind,subject,activity)
-
-#AVERAGE OF MEASUREMENTS FOR ACTIVITY AND SUBJECT TABLE
-bdcons<-bdbind%>%group_by(subject,activity)%>%
-  summarise_at(c(3:81),mean)
